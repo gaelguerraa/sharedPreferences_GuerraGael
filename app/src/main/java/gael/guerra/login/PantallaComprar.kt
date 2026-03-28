@@ -1,6 +1,8 @@
 package gael.guerra.login
 
+import android.R.attr.onClick
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +35,8 @@ import gael.guerra.login.model.filtrarProductos
 @Composable
 fun ProductosScreen(
     onCarritoClick: () -> Unit,
-    onAgregarCarrito: (Producto) -> Unit
+    onAgregarCarrito: (Producto) -> Unit,
+    onProductoClick: (Producto) -> Unit
 ) {
     var query by remember { mutableStateOf("") }
 
@@ -69,7 +72,8 @@ fun ProductosScreen(
             items(productosFiltrados) { producto ->
                 ProductoItem(
                     producto = producto,
-                    onAgregar = { onAgregarCarrito(producto) }
+                    onAgregar = { onAgregarCarrito(producto) },
+                    onClick = { onProductoClick(producto) }
                 )
             }
         }
@@ -79,12 +83,14 @@ fun ProductosScreen(
 @Composable
 fun ProductoItem(
     producto: Producto,
-    onAgregar: () -> Unit
+    onAgregar: () -> Unit,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick() }, // 🔥 click para ir al detalle
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(
