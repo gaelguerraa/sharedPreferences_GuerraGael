@@ -36,7 +36,7 @@ class ProductDAO(private val dbHelper: DatabaseHelper){
                 val name = getString(getColumnIndexOrThrow(ProductsEntry.COLUMN_NAME))
                 val price = getFloat(getColumnIndexOrThrow(ProductsEntry.COLUMN_PRICE))
                 val description = getString(getColumnIndexOrThrow(ProductsEntry.COLUMN_DESCRIPTION))
-                val image = getString(getColumnIndexOrThrow(ProductsEntry.COLUMN_IMAGE))
+                val image = getInt(getColumnIndexOrThrow(ProductsEntry.COLUMN_IMAGE))
                 products.add(Product(id, name, price, image, description))
             }
 
@@ -66,7 +66,7 @@ class ProductDAO(private val dbHelper: DatabaseHelper){
                 val name = it.getString(it.getColumnIndexOrThrow(ProductsEntry.COLUMN_NAME))
                 val price = it.getFloat(it.getColumnIndexOrThrow(ProductsEntry.COLUMN_PRICE))
                 val description = it.getString(it.getColumnIndexOrThrow(ProductsEntry.COLUMN_DESCRIPTION))
-                val image = it.getString(it.getColumnIndexOrThrow(ProductsEntry.COLUMN_IMAGE))
+                val image = it.getInt(it.getColumnIndexOrThrow(ProductsEntry.COLUMN_IMAGE))
                 Product(id, name, price, image, description)
             } else{
                 null
