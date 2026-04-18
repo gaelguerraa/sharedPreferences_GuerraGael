@@ -25,6 +25,30 @@ class DatabaseHelper(context: Context):
             )
         """.trimIndent()
         db.execSQL(createTable)
+
+        val createCartTable = """
+            CREATE TABLE Cart (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                productId INTEGER,
+                FOREIGN KEY(productId) REFERENCES ${ProductsEntry.TABLE_NAME}(${ProductsEntry.COLUMN_ID})
+            )
+        """.trimIndent()
+        db.execSQL(createCartTable)
+
+        insertInitialProducts(db)
+    }
+
+    private fun insertInitialProducts(db: SQLiteDatabase) {
+        val products = campa.david.thecheezery_davidcampa.domain.productList
+        for (product in products) {
+            val values = android.content.ContentValues().apply {
+                put(ProductsEntry.COLUMN_NAME, product.name)
+                put(ProductsEntry.COLUMN_IMAGE, product.image)
+                put(ProductsEntry.COLUMN_PRICE, product.price)
+                put(ProductsEntry.COLUMN_DESCRIPTION, product.descriptor)
+            }
+            db.insert(ProductsEntry.TABLE_NAME, null, values)
+        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

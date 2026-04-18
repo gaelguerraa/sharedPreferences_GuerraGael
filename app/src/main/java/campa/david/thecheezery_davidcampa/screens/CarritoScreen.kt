@@ -1,7 +1,6 @@
 package campa.david.thecheezery_davidcampa.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -21,18 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import campa.david.thecheezery_davidcampa.R
 import campa.david.thecheezery_davidcampa.domain.Product
-import campa.david.thecheezery_davidcampa.domain.productList
 
 @Composable
-fun ProductsScreen(
+fun CarritoScreen(
     products: List<Product>,
-    onProductClick: (Product) -> Unit,
-    onCartClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onBack: () -> Unit
 ) {
     val context = LocalContext.current
     Column(
@@ -45,18 +38,16 @@ fun ProductsScreen(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(onClick = onLogoutClick) {
-                Text("Cerrar Sesión")
+            Button(onClick = onBack) {
+                Text("⬅ Volver")
             }
             Text(
-                "Products",
+                "Carrito",
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineSmall
             )
-            Button(onClick = onCartClick) {
-                Text("Carrito")
-            }
+            Spacer(modifier = Modifier.width(64.dp)) // To center the title
         }
 
         LazyColumn(Modifier.fillMaxWidth()) {
@@ -64,7 +55,6 @@ fun ProductsScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onProductClick(product) }
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -88,15 +78,4 @@ fun ProductsScreen(
             }
         }
     }
-}
-
-fun abrirCarritoScreen(){
-    // Lógica para abrir la pantalla del carrito
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun ProductsScreenPreview(){
-    ProductsScreen(products = productList, onProductClick = {}, onCartClick = {}, onLogoutClick = {})
 }
