@@ -57,16 +57,7 @@ fun AppContent(modifier: Modifier = Modifier) {
 
     val isLoggedIn by dataStoreManager.isLoggedInFlow.collectAsState(initial = false)
     
-    var products by remember { mutableStateOf(listOf<Product>()) }
     var currentScreen by rememberSaveable { mutableStateOf("products") }
-    var selectedProduct by remember { mutableStateOf<Product?>(null) }
-    var cartItems by remember { mutableStateOf(listOf<Product>()) }
-
-    LaunchedEffect(isLoggedIn) {
-        if (isLoggedIn) {
-            products = productDAO.getAllProducts()
-        }
-    }
 
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
 
@@ -81,16 +72,9 @@ fun AppContent(modifier: Modifier = Modifier) {
                 when (currentScreen) {
                     "products" -> {
                         ProductsScreen(
-                            products = products,
-                            onProductClick = { product ->
-                                selectedProduct = product
-                                currentScreen = "detail"
-                            },
+                            productDAO = productDAO,
                             onCartClick = {
-                                scope.launch {
-                                    cartItems = productDAO.getCartItems()
-                                    currentScreen = "cart"
-                                }
+                                currentScreen = "cart"
                             },
                             onLogoutClick = {
                                 scope.launch {
@@ -99,23 +83,9 @@ fun AppContent(modifier: Modifier = Modifier) {
                             }
                         )
                     }
-                    "detail" -> {
-                        selectedProduct?.let { product ->
-                            ProductDetailScreen(
-                                product = product,
-                                onAddToCart = {
-                                    scope.launch {
-                                        productDAO.addToCart(product.id)
-                                        // Optional: Show a toast or feedback
-                                    }
-                                },
-                                onBack = { currentScreen = "products" }
-                            )
-                        }
-                    }
                     "cart" -> {
                         CarritoScreen(
-                            products = cartItems,
+                            productDAO = productDAO,
                             onBack = { currentScreen = "products" }
                         )
                     }

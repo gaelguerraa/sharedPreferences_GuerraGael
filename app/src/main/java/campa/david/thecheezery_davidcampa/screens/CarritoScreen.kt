@@ -14,20 +14,32 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import campa.david.thecheezery_davidcampa.data.ProductDAO
 import campa.david.thecheezery_davidcampa.domain.Product
 
 @Composable
 fun CarritoScreen(
-    products: List<Product>,
+    productDAO: ProductDAO,
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
+    var products by remember { mutableStateOf(listOf<Product>()) }
+
+    LaunchedEffect(Unit) {
+        products = productDAO.getCartItems()
+    }
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -47,7 +59,7 @@ fun CarritoScreen(
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineSmall
             )
-            Spacer(modifier = Modifier.width(64.dp)) // To center the title
+            Spacer(modifier = Modifier.width(64.dp))
         }
 
         LazyColumn(Modifier.fillMaxWidth()) {
